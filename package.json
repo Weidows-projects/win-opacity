@@ -1,0 +1,17 @@
+{
+  "name": "win-opacity",
+  "version": "1.0.0",
+  "description": "Get and set the transparency of different windows on Windows",
+  "main": "main.js",
+  "keywords": [
+    "windows",
+    "opacity",
+    "transparency"
+  ],
+  "author": "Mike C",
+  "license": "MIT",
+  "dependencies": {
+    "ffi": "^2.2.0",
+    "ref": "^1.3.4"
+  }
+}
