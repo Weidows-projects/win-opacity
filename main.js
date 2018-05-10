@@ -1,54 +1,59 @@
-/**
- * Native calls to access and modify windows
- * 
- * Courtesy of https://github.com/SkaceKamen/vscode-win-opacity
- */
-
-const ref = require('ref');
 const ffi = require('ffi');
+const ref = require('ref');
+const user32 = require('./user32');
+const t = require('./types');
 
-const bytePtr = ref.refType(ref.types.byte);
-const voidPtr = ref.refType(ref.types['void']);
-const stringPtr = ref.refType(ref.types.CString);
-const ulongPtr = ref.refType(ref.types.ulong);
-
+// C Constants
+const GA_ROOTOWNER = 3;
 const GWL_EXSTYLE = -20;
-const WS_EX_LAYERED = 0x80000;
 const LWA_ALPHA = 0x2;
+const STATE_SYSTEM_INVISIBLE = 0x00008000;
+const WS_EX_LAYERED = 0x80000;
 const WS_EX_TOOLWINDOW = 0x00000080;
+const WS_EX_APPWINDOW = 0x00040000;
 
-// Load all of the user32 functions we need
-// Note: The A suffix indicates we're using ASCII for texts
-const user32 = ffi.Library('user32', {
-	EnumWindows: ['bool', [voidPtr, 'int32']],
-	GetWindowTextA: ['long', ['long', stringPtr, 'long']],
-	GetWindowLongA: ['long', ['long', 'int32']],
-	SetWindowLongA: ['uint32', ['long', 'int32', 'long']],
-	SetLayeredWindowAttributes: ['bool', ['long', 'uint32', 'byte', 'uint32']],
-	GetLayeredWindowAttributes: ['bool', ['long', ulongPtr, bytePtr, ulongPtr]],
-	IsWindowVisible: ['bool', ['long']]
-});
+const isAltTabWindow = (handle) => {
+	if (handle.handle) {
+		handle = handle.handle;
+	}
 
-// Ignore certain system processes
-const ignoredWindows = [
-	'Microsoft Store',
-	'Photos',
-	'Program Manager',
-	'Settings',
-	'Team Foundation Build Notification'
-];
+	if (!user32.IsWindowVisible(handle)) {
+		return false;
+	}
 
-let _windows = []
+	let handleWalk = null;
+	let attemptedHandle = user32.GetAncestor(handle, GA_ROOTOWNER);
+	while (attemptedHandle !== handleWalk) {
+		handleWalk = attemptedHandle;
+		attemptedHandle = user32.GetLastActivePopup(handleWalk);
+		if (user32.IsWindowVisible(attemptedHandle)) {
+			break;
+		}
+	}
+	if (handleWalk !== handle) {
+		return false;
+	}
+
+	// Filter out tool windows
+	if (user32.GetWindowLongA(handle, GWL_EXSTYLE) & WS_EX_TOOLWINDOW) {
+		return false;
+	}
+
+	return true;
+};
+
+let _windows = [];
 const getWindows = ffi.Callback('bool', ['long', 'int32'], function(hwnd) {
-	if (!user32.IsWindowVisible(hwnd)) {
+	if (!isAltTabWindow(hwnd)) {
 		return true;
 	}
+
 	// Load window title
 	const buffer = new Buffer(255);
-	user32.GetWindowTextA(hwnd, buffer, 255);
-	const windowName = ref.readCString(buffer, 0).trim();
+	user32.GetWindowTextW(hwnd, buffer, 255);
+	const windowName = buffer.toString('utf16le').replace(/\u0000/g, '').trim();
 
-	if (!windowName || ignoredWindows.includes(windowName)) {
+	if (!windowName) {
 		return true;
 	}
 
