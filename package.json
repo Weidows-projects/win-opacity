@@ -2,7 +2,7 @@
   "name": "win-opacity",
   "version": "1.0.0",
   "description": "Get and set the transparency of different windows on Windows",
-  "main": "main.js",
+  "main": "lib.js",
   "keywords": [
     "windows",
     "opacity",
