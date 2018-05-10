@@ -2,7 +2,7 @@ const ref = require('ref');
 
 // Type aliases
 const BOOL = ref.types.bool;
-const BYTE = ref.types.char;
+const BYTE = ref.types.uchar;
 const DWORD = ref.types.ulong;
 const HWND = ref.types.long;
 const LONG = ref.types.long;

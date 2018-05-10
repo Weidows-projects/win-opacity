@@ -11,7 +11,8 @@
   "author": "Mike C",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "dependencies": {
     "ffi": "^2.2.0",
@@ -20,6 +21,7 @@
     "ref-struct": "^1.1.0"
   },
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "^4.19.1",
+    "mocha": "^5.1.1"
   }
 }

@@ -105,8 +105,14 @@ exports.getWindows = function() {
  * @param {number} opacity Must be [0-255]
  */
 exports.setOpacity = function(handle, opacity) {
-  if (handle.title && handle.handle) {
-    handle = handle.handle;
+  if (typeof handle !== 'number') {
+    if (handle.title && handle.handle) {
+      handle = handle.handle;
+    } else {
+      throw new Error('Must provide a handle of window');
+    }
+  } else if (handle === null) {
+    throw new Error('Handle cannot be null');
   }
 
   // Make sure the opacity is a valid value
@@ -129,8 +135,14 @@ exports.setOpacity = function(handle, opacity) {
  * @returns {number} Number is [0-255]
  */
 exports.getOpacity = function(handle) {
-  if (handle.title && handle.handle) {
-    handle = handle.handle;
+  if (typeof handle !== 'number') {
+    if (handle.title && handle.handle) {
+      handle = handle.handle;
+    } else {
+      throw new Error('Must provide a handle of window');
+    }
+  } else if (handle === null) {
+    throw new Error('Handle cannot be null');
   }
 
   let outKey = ref.alloc('ulong');
