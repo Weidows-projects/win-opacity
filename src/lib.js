@@ -145,13 +145,16 @@ exports.getOpacity = function(handle) {
     throw new Error('Handle cannot be null');
   }
 
+  // Find out if the window has any opacity applied to it
+  const windowLong = user32.GetWindowLongA(handle, GWL_EXSTYLE);
+  if (windowLong & WS_EX_LAYERED === 0) {
+    // No opacity has been applied, return as fully opaque
+    return 255;
+  }
+
   let outKey = ref.alloc('ulong');
   let outAlpha = ref.alloc('byte');
   let outFlags = ref.alloc('ulong');
   user32.GetLayeredWindowAttributes(handle, outKey, outAlpha, outFlags);
-  const alpha = outAlpha.deref();
-  if (alpha === 0) {
-    return 255;
-  }
-  return alpha;
+  return outAlpha.deref();
 };
