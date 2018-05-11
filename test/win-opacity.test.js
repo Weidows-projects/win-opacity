@@ -1,7 +1,7 @@
 const winOpacity = require('../');
 const assert = require('assert');
 
-describe('WinOpacity', function() {
+describe('win-opacity', function() {
   describe('interface', function() {
     it('should contain a getWindows function', function() {
       assert.ok(winOpacity.getWindows, 'Expected a getWindows function to exist');
@@ -57,6 +57,26 @@ describe('WinOpacity', function() {
       assert.doesNotThrow(function() {
         winOpacity.setOpacity(window.handle, opacity);
       }, 'Should not throw when passed a window handle');
+    });
+  });
+
+  describe('invisible windows', function() {
+    it('should be able to make a window invisible', function() {
+      // Setup
+      // Get the first non-invisible window
+      const window = winOpacity.getWindows()
+        .find(w => winOpacity.getOpacity(w) > 0);
+      const startingOpacity = winOpacity.getOpacity(window);
+      
+      // Gather result
+      winOpacity.setOpacity(window, 0);
+      const actual = winOpacity.getOpacity(window);
+
+      // Revert state
+      winOpacity.setOpacity(window, startingOpacity);
+
+      // Set expectations
+      assert.equal(actual, 0, 'An invisible window must return an opacity of 0');
     });
   });
 });
