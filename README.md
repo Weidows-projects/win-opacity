@@ -1,6 +1,6 @@
 # win-opacity
 
-Read and write the opacity values of windows on the Windows operating system. **Not yet on npm, release coming soon**
+Read and write the opacity values of windows on the Windows operating system.
 
 ## Example
 
@@ -14,3 +14,24 @@ for (const win of windows) {
   winOpacity.setOpacity(win, opacity - 10);
 }
 ```
+
+## Type Definitions
+
+Definitions given in TypeScript format.
+
+```typescript
+type WindowHandle = number;
+interface NativeWindow {
+  string title;
+  WindowHandle handle;
+};
+```
+
+## API
+
+- `getWindows() -> NativeWindow[]`
+  - Gets all visible windows
+- `getOpacity(window: WindowHandle | NativeWindow) -> number`
+  - Returns the opacity of a window. The value will be in the range of [0-255]
+- `setOpacity(window: WindowHandle | NativeWindow, opacity: number) -> void`
+  - Sets the opacity of a window. `opacity` must be in the range of [0-255]
