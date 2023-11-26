@@ -35,3 +35,5 @@ interface NativeWindow {
   - Returns the opacity of a window. The value will be in the range of [0-255]
 - `setOpacity(window: WindowHandle | NativeWindow, opacity: number) -> void`
   - Sets the opacity of a window. `opacity` must be in the range of [0-255]
+
+> [GitHub - MCluck90/auto-win-opacity: Automatically apply different opacity levels to windows on Windows](https://github.com/MCluck90/auto-win-opacity)

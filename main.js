@@ -114,7 +114,7 @@ if (process.argv.includes("kill")) {
 } else {
   // Force the process to stay open until otherwise noted
   forceOpenLoop = setTimeout(function wait() {
-    forceOpenLoop = setTimeout(wait, 10_000);
+    forceOpenLoop = setTimeout(wait, 1_000);
   });
 
   poll();
