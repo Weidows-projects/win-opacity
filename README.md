@@ -2,6 +2,16 @@
 
 Read and write the opacity values of windows on the Windows operating system.
 
+## Installation
+
+```
+yarn global add https://github.com/Weidows-projects/win-opacity
+```
+
+```
+
+```
+
 ## Example
 
 ```js
