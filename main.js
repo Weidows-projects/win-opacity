@@ -4,12 +4,18 @@ const fs = require("fs");
 const path = require("path");
 const winOpacity = require(".");
 
-const configPath = path.join(__dirname, "config.json");
-
-// Copy the example config if a user config does not exist
-if (!fs.existsSync(configPath)) {
-  fs.copyFileSync(path.join(__dirname, "config.example.json"), configPath);
+let configPath;
+if (fs.existsSync("config.json")) configPath = "config.json";
+else {
+  configPath = path.join(__dirname, "config.json");
+  // Copy the example config if a user config does not exist
+  if (!fs.existsSync(configPath)) {
+    fs.copyFileSync(path.join(__dirname, "config.example.json"), configPath);
+  }
 }
+
+console.log("Current config: ", configPath);
+console.log("Example config: ", path.join(__dirname, "config.example.json"));
 
 /**
  * Converts an object to JSON while attempting to retain the original whitespace format

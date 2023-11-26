@@ -9,7 +9,13 @@ yarn global add https://github.com/Weidows-projects/win-opacity
 ```
 
 ```
-
+└ $ win-opacity list
+180 { title: 'win-opacity-js - Visual Studio Code', handle: 67630 }
+255 {
+  title: 'C:\\WINDOWS\\system32\\cmd.exe - D:\\Repos\\Weidows-projects\\Keeper\\utils.bat',
+  handle: 196680
+}
+255 { title: 'Windows 输入体验', handle: 132566 }
 ```
 
 ## Example
