@@ -1,4 +1,4 @@
-const ref = require('ref');
+const ref = require("ref-napi");
 
 // Type aliases
 const BOOL = ref.types.bool;

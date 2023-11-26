@@ -1,6 +1,6 @@
 {
   "name": "win-opacity",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Get and set the transparency of different windows on Windows",
   "main": "src/lib.js",
   "keywords": [
@@ -15,13 +15,13 @@
     "test": "mocha"
   },
   "dependencies": {
-    "ffi": "^2.2.0",
-    "ref": "^1.3.4",
-    "ref-array": "^1.2.0",
-    "ref-struct": "^1.1.0"
+    "ffi-napi": "^4.0.3",
+    "ref-array-di": "^1.2.2",
+    "ref-napi": "^3.0.3",
+    "ref-struct-di": "^1.1.1"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "mocha": "^5.1.1"
+    "eslint": "^8.54.0",
+    "mocha": "^10.2.0"
   }
 }

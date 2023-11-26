@@ -1,6 +1,6 @@
-const ffi = require('ffi');
-const ref = require('ref');
-const user32 = require('./user32');
+const ffi = require("ffi-napi");
+const ref = require("ref-napi");
+const user32 = require("./user32");
 
 // C Constants
 const GA_ROOTOWNER = 3;
@@ -63,19 +63,24 @@ const isAltTabWindow = (handle) => {
 let _windows = [];
 
 // Called during EnumWindows
-const getWindows = ffi.Callback('bool', ['long', 'int32'], 
+const getWindows = ffi.Callback(
+  "bool",
+  ["long", "int32"],
   /**
    * @param {WindowHandle} hwnd
    */
-  function(hwnd) {
+  function (hwnd) {
     if (!isAltTabWindow(hwnd)) {
       return true;
     }
 
     // Load window title
-    const buffer = new Buffer(255);
+    const buffer = Buffer.alloc(255);
     user32.GetWindowTextW(hwnd, buffer, 255);
-    const windowName = buffer.toString('utf16le').replace(/\u0000/g, '').trim();
+    const windowName = buffer
+      .toString("utf16le")
+      .replace(/\u0000/g, "")
+      .trim();
 
     if (!windowName) {
       return true;
@@ -84,16 +89,17 @@ const getWindows = ffi.Callback('bool', ['long', 'int32'],
     // Provide the windows title and original handle
     _windows.push({
       title: windowName,
-      handle: hwnd
+      handle: hwnd,
     });
     return true;
-  });
+  }
+);
 
 /**
  * Returns all visible windows
  * @returns {NativeWindow[]}
  */
-exports.getWindows = function() {
+exports.getWindows = function () {
   _windows = [];
   user32.EnumWindows(getWindows, 0);
   return _windows;
@@ -101,23 +107,23 @@ exports.getWindows = function() {
 
 /**
  * Sets the opacity of a given window
- * @param {NativeWindow|WindowHandle} handle 
+ * @param {NativeWindow|WindowHandle} handle
  * @param {number} opacity Must be [0-255]
  */
-exports.setOpacity = function(handle, opacity) {
-  if (typeof handle !== 'number') {
+exports.setOpacity = function (handle, opacity) {
+  if (typeof handle !== "number") {
     if (handle.title && handle.handle) {
       handle = handle.handle;
     } else {
-      throw new Error('Must provide a handle of window');
+      throw new Error("Must provide a handle of window");
     }
   } else if (handle === null) {
-    throw new Error('Handle cannot be null');
+    throw new Error("Handle cannot be null");
   }
 
   // Make sure the opacity is a valid value
-  if (typeof opacity !== 'number' || opacity < 0 || opacity > 255) {
-    throw new Error('Must provide an opacity value between 0 and 255');
+  if (typeof opacity !== "number" || opacity < 0 || opacity > 255) {
+    throw new Error("Must provide an opacity value between 0 and 255");
   }
 
   // Take the floor of the number to remove any floating point bits
@@ -131,30 +137,33 @@ exports.setOpacity = function(handle, opacity) {
 
 /**
  * Returns the opacity of a window
- * @param {NativeWindow|WindowHandle} handle 
+ * @param {NativeWindow|WindowHandle} handle
  * @returns {number} Number is [0-255]
  */
-exports.getOpacity = function(handle) {
-  if (typeof handle !== 'number') {
+exports.getOpacity = function (handle) {
+  if (typeof handle !== "number") {
     if (handle.title && handle.handle) {
       handle = handle.handle;
     } else {
-      throw new Error('Must provide a handle of window');
+      throw new Error("Must provide a handle of window");
     }
   } else if (handle === null) {
-    throw new Error('Handle cannot be null');
+    throw new Error("Handle cannot be null");
   }
 
   // Find out if the window has any opacity applied to it
   const windowLong = user32.GetWindowLongA(handle, GWL_EXSTYLE);
-  if (windowLong & WS_EX_LAYERED === 0) {
+  if (windowLong & (WS_EX_LAYERED === 0)) {
     // No opacity has been applied, return as fully opaque
     return 255;
   }
 
-  let outKey = ref.alloc('ulong');
-  let outAlpha = ref.alloc('byte');
-  let outFlags = ref.alloc('ulong');
-  user32.GetLayeredWindowAttributes(handle, outKey, outAlpha, outFlags);
+  let outKey = ref.alloc("ulong");
+  let outAlpha = ref.alloc("byte");
+  let outFlags = ref.alloc("ulong");
+  if (!user32.GetLayeredWindowAttributes(handle, outKey, outAlpha, outFlags)) {
+    return 255;
+  }
+
   return outAlpha.deref();
 };

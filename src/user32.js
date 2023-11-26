@@ -1,6 +1,6 @@
 /* Bindings for relevant user32 functions */
-const ffi = require('ffi');
-const ref = require('ref');
+const ffi = require("ffi-napi");
+const ref = require("ref-napi");
 const t = require('./types');
 
 module.exports = ffi.Library('user32', {
@@ -24,8 +24,9 @@ module.exports = ffi.Library('user32', {
     t.BOOL,
     [t.HWND, t.COLORREF, t.BYTE, t.DWORD]
   ],
+  // https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-getlayeredwindowattributes
   GetLayeredWindowAttributes: [
-    t.BOOL, 
+    t.BOOL,
     [t.HWND, t.ptr.COLORREF, t.ptr.BYTE, t.ptr.DWORD]
   ],
   IsWindowVisible: [
