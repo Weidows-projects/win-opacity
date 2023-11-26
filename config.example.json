@@ -1,0 +1,13 @@
+{
+	"pollInMilliseconds": 10000,
+	"windows": [
+		{
+			"pattern": "- Visual Studio Code",
+			"opacity": 180
+		},
+		{
+			"pattern": "- Microsoft​ Edge$",
+			"opacity": 200
+		}
+	]
+}

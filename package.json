@@ -12,7 +12,11 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha"
+    "test": "mocha",
+    "start": "node ./main.js"
+  },
+  "bin": {
+    "auto-win-opacity": "./main.js"
   },
   "dependencies": {
     "ffi-napi": "^4.0.3",
