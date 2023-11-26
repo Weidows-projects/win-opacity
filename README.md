@@ -1,14 +1,20 @@
-# win-opacity
+## CLI
 
-Read and write the opacity values of windows on the Windows operating system.
-
-## Installation
+1. writer `config.json` at anywhere, [example](config.example.json)
+2. just start `win-opacity` in terminal where's config.json at.
+   1. if config.json not found in current path, will use default config in installation path.
+3. app will keep runing, change specified-window's opacity.
 
 ```
 yarn global add https://github.com/Weidows-projects/win-opacity
 ```
 
 ```
+└ $ win-opacity
+Current config:  config.json
+Example config:  D:\Scoop\persist\nvm\yarn\global\node_modules\win-opacity\config.example.json
+
+
 └ $ win-opacity list
 180 { title: 'win-opacity-js - Visual Studio Code', handle: 67630 }
 255 {
