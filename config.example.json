@@ -1,4 +1,5 @@
 {
+  "debug": false,
   "pollInMilliseconds": 1000,
   "windows": [
     {
